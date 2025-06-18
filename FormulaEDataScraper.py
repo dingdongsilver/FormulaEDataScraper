@@ -22,6 +22,9 @@ class Season:
         self.name = name
         self.races = []
 
+    def add_race(self, race):
+        self.races.append()
+
 class Race:
     def __init__(self, id, name, country, city, date):
         self.id = id
@@ -71,12 +74,28 @@ championshipResponse = requests.get(seasonsAPIUrl, headers=headers)
 championshipData = championshipResponse.json()
 
 seasons = []
+races = []
+
 for season in championshipData['championships']:
     individualSeason = Season(id=season['id'], name=season['name'])
     seasons.append(individualSeason)
 
 for season in seasons:
-    print(f"Season ID: {season.id}, Season Name: {season.races}")
+    print(raceAPIUrl+season.id)
+    raceResponse = requests.get(raceAPIUrl+season.id, headers=headers)
+    raceData = raceResponse.json()
+    for race in raceData['races']:
+        individualRace = Race(id=race['id'], name=race['name'], country=race['country'], city=race['city'], date=race['date']   )
+        print(f'appending {individualRace.name}')
+        season.races.append(individualRace)
+
+
+
+
+
+
+
+
 # for season in seasons:
 #     raceResponse = requests.get(raceAPIUrl+season.id, headers=headers)
 #     raceData = raceResponse.json()
